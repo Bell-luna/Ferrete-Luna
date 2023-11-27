@@ -74,3 +74,39 @@ INSERT INTO Proveedores (ID_Proveedor, Nombre, Direccion, Telefono, Email) VALUE
 INSERT INTO Ventas (ID_Venta, Fecha, Total, ID_Cliente) VALUES
 (1, '2023-01-15', 570.50, 1),
 (2, '2023-01-17', 150.00, 2);
+
+
+-- Vista 1: Productos por Categoría
+CREATE VIEW Vista_ProductosPorCategoria AS
+SELECT p.ID_Producto, p.Nombre AS NombreProducto, p.Descripcion, p.Precio, p.Stock, c.Nombre AS NombreCategoria
+FROM Productos p
+JOIN Categorias c ON p.ID_Categoria = c.ID_Categoria;
+
+-- Vista 2: Ventas con Detalles de Clientes
+CREATE VIEW Vista_VentasClientes AS
+SELECT v.ID_Venta, v.Fecha, v.Total, c.ID_Cliente, c.Nombre AS NombreCliente, c.Dirección AS DirecciónCliente, c.Teléfono AS TeléfonoCliente, c.Email AS EmailCliente
+FROM Ventas v
+JOIN Clientes c ON v.ID_Cliente = c.ID_Cliente;
+
+-- Vista 3: Proveedores y Productos
+-- Esta vista muestra la relación entre los productos y sus proveedores (asumiendo que hay una tabla de relación que no se menciona en el ejemplo).
+CREATE VIEW Vista_ProveedoresProductos AS
+SELECT pr.ID_Proveedor, pr.Nombre AS NombreProveedor, pr.Dirección, pr.Teléfono, pr.Email, p.Nombre AS NombreProducto, p.Descripción
+FROM Proveedores pr
+JOIN Productos_Proveedores pp ON pr.ID_Proveedor = pp.ID_Proveedor
+JOIN Productos p ON pp.ID_Producto = p.ID_Producto;
+
+-- Vista 4: Productos con Stock Bajo
+-- Esta vista muestra los productos con un stock menor a un umbral específico.
+CREATE VIEW Vista_ProductosStockBajo AS
+SELECT ID_Producto, Nombre, Descripción, Precio, Stock
+FROM Productos
+WHERE Stock < 10;
+
+-- Vista 5: Ventas Totales por Fecha
+CREATE VIEW Vista_VentasTotalesPorFecha AS
+SELECT Fecha, SUM(Total) AS VentasTotales
+FROM Ventas
+GROUP BY Fecha;
+
+

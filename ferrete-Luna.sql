@@ -109,4 +109,35 @@ SELECT Fecha, SUM(Total) AS VentasTotales
 FROM Ventas
 GROUP BY Fecha;
 
+DELIMITER $$
 
+CREATE FUNCTION valor_inventario_categoria(categoria_id INT) RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    DECLARE valor_total DECIMAL(10,2) DEFAULT 0.0;
+    SELECT SUM(Precio * Stock) INTO valor_total
+    FROM Productos
+    WHERE ID_Categoria = categoria_id;
+    RETURN valor_total;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION obtener_email_cliente(cliente_id INT) RETURNS VARCHAR(255)
+DETERMINISTIC
+BEGIN
+    DECLARE correo_cliente VARCHAR(255);
+    SELECT Email INTO correo_cliente
+    FROM Clientes
+    WHERE ID_Cliente = cliente_id;
+    RETURN correo_cliente;
+END$$
+
+DELIMITER ;
+
+
+SELECT valor_inventario_categoria(1);
+
+SELECT obtener_email_cliente(1);

@@ -63,3 +63,15 @@ La base de datos está diseñada para gestionar la información de una ferreter�
 
 ### Vista_VentasTotalesPorFecha:
 - Muestra el total de ingresos generados por las ventas para cada fecha, lo cual es útil para reportes de ingresos diarios.
+
+## Funciones Almacenadas de la Base de Datos
+
+- **valor_inventario_categoria(categoria_id INT):**
+  - Función que calcula el valor total del inventario para una categoría específica.
+  - Recibe el ID de la categoría como parámetro.
+  - Retorna el valor total del inventario como un `DECIMAL(10,2)`.
+
+- **obtener_email_cliente(cliente_id INT):**
+  - Función que obtiene el correo electrónico de un cliente basado en su ID.
+  - Recibe el ID del cliente como parámetro.
+  - Retorna el correo electrónico del cliente como un `VARCHAR(255)`.

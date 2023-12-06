@@ -141,3 +141,46 @@ DELIMITER ;
 SELECT valor_inventario_categoria(1);
 
 SELECT obtener_email_cliente(1);
+
+-- Stored Procedure 1: OrdenarRegistrosDeTabla
+-- Este SP permite ordenar los registros de una tabla específica por un campo y orden especificado.
+DELIMITER //
+CREATE PROCEDURE OrdenarRegistrosDeTabla(IN nombreCampo VARCHAR(255), IN tipoOrden VARCHAR(4))
+BEGIN
+    IF tipoOrden = 'ASC' OR tipoOrden = 'DESC' THEN
+        SET @tSQL = CONCAT('SELECT * FROM Productos ORDER BY ', nombreCampo, ' ', tipoOrden, ';');
+        PREPARE stmt FROM @tSQL;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+    ELSE
+        SELECT 'Error: El tipo de orden debe ser ASC o DESC.';
+    END IF;
+END //
+DELIMITER ;
+
+-- Ejemplo de uso:
+-- CALL OrdenarRegistrosDeTabla('Precio', 'ASC');
+-- Este ejemplo ordenará todos los productos por el campo 'Precio' de forma ascendente.
+
+-- Stored Procedure 2: InsertarOEliminarClienteProducto
+-- Este SP permite insertar un nuevo cliente o eliminar un producto específico.
+DELIMITER //
+CREATE PROCEDURE InsertarOEliminarClienteProducto(IN accion VARCHAR(8), IN id INT, IN nombre VARCHAR(255), IN direccion VARCHAR(255), IN telefono VARCHAR(20), IN email VARCHAR(255))
+BEGIN
+    IF accion = 'INSERTAR' THEN
+        INSERT INTO Clientes (ID_Cliente, Nombre, Direccion, Telefono, Email) VALUES (id, nombre, direccion, telefono, email);
+    ELSEIF accion = 'ELIMINAR' THEN
+        DELETE FROM Productos WHERE ID_Producto = id;
+    ELSE
+        SELECT 'Error: La acción debe ser INSERTAR o ELIMINAR.';
+    END IF;
+END //
+DELIMITER ;
+
+-- Ejemplo de uso:
+-- CALL InsertarOEliminarClienteProducto('INSERTAR', NULL, 'Laura Martínez', 'Calle del Bosque 123', '321-654-987', 'laura.mtz@example.com');
+-- Este ejemplo insertará un nuevo cliente con los datos proporcionados.
+
+-- CALL InsertarOEliminarClienteProducto('ELIMINAR', 3, '', '', '', '');
+-- Este ejemplo eliminará el producto con el ID_Producto 3.
+

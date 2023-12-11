@@ -80,21 +80,21 @@ Para garantizar un seguimiento detallado y realizar auditorías de las operacion
 
 ## Tablas LOG:
 
-- **Log_Productos:- **
+### Log_Productos:
 Registra todas las operaciones de intento de inserción y eliminación de productos.
 Campos como usuario, fecha, hora, operación realizada y detalles del producto afectado.
 
-- **Log_Ventas:- **
+### Log_Ventas:
 Captura las operaciones de intento de actualización de ventas y las inserciones de nuevas ventas.
 Campos como usuario, fecha, hora, operación realizada y detalles de la venta afectada.
 
 
-##Triggers:
+## Triggers:
 
-Productos:
+### Productos:
 AntesInsertarProducto: Controla el intento de inserción de un nuevo producto antes de que se ejecute la operación.
 DespuesEliminarProducto: Registra la eliminación de un producto después de que se haya realizado la operación.
 
-Ventas:
+### Ventas:
 AntesActualizarVenta: Controla el intento de actualización de una venta antes de que se ejecute la operación.
 DespuesInsertarVenta: Registra la inserción de una nueva venta después de que se haya realizado la operación.

@@ -184,3 +184,72 @@ DELIMITER ;
 -- CALL InsertarOEliminarClienteProducto('ELIMINAR', 3, '', '', '', '');
 -- Este ejemplo eliminará el producto con el ID_Producto 3.
 
+CREATE TABLE Log_Productos (
+    Log_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Usuario VARCHAR(255),
+    Fecha DATE,
+    Hora TIME,
+    Operacion VARCHAR(50),
+    ID_Producto INT,
+    Descripcion TEXT
+);
+
+CREATE TABLE Log_Ventas (
+    Log_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Usuario VARCHAR(255),
+    Fecha DATE,
+    Hora TIME,
+    Operacion VARCHAR(50),
+    ID_Venta INT,
+    Descripcion TEXT
+);
+
+
+-- Trigger BEFORE INSERT para Productos
+DELIMITER //
+CREATE TRIGGER AntesInsertarProducto
+BEFORE INSERT ON Productos
+FOR EACH ROW
+BEGIN
+    INSERT INTO Log_Productos (Usuario, Fecha, Hora, Operacion, ID_Producto, Descripcion)
+    VALUES (USER(), CURDATE(), CURTIME(), 'INTENTO INSERTAR', NEW.ID_Producto, 'Intento de inserción de producto');
+END;
+//
+DELIMITER ;
+
+-- Trigger AFTER DELETE para Productos
+DELIMITER //
+CREATE TRIGGER DespuesEliminarProducto
+AFTER DELETE ON Productos
+FOR EACH ROW
+BEGIN
+    INSERT INTO Log_Productos (Usuario, Fecha, Hora, Operacion, ID_Producto, Descripcion)
+    VALUES (USER(), CURDATE(), CURTIME(), 'ELIMINADO', OLD.ID_Producto, CONCAT('Producto eliminado: ', OLD.Nombre));
+END;
+//
+DELIMITER ;
+
+
+-- Trigger BEFORE UPDATE para Ventas
+DELIMITER //
+CREATE TRIGGER AntesActualizarVenta
+BEFORE UPDATE ON Ventas
+FOR EACH ROW
+BEGIN
+    INSERT INTO Log_Ventas (Usuario, Fecha, Hora, Operacion, ID_Venta, Descripcion)
+    VALUES (USER(), CURDATE(), CURTIME(), 'INTENTO ACTUALIZAR', NEW.ID_Venta, 'Intento de actualización de venta');
+END;
+//
+DELIMITER ;
+
+-- Trigger AFTER INSERT para Ventas
+DELIMITER //
+CREATE TRIGGER DespuesInsertarVenta
+AFTER INSERT ON Ventas
+FOR EACH ROW
+BEGIN
+    INSERT INTO Log_Ventas (Usuario, Fecha, Hora, Operacion, ID_Venta, Descripcion)
+    VALUES (USER(), CURDATE(), CURTIME(), 'INSERTADA', NEW.ID_Venta, CONCAT('Venta realizada con total: ', NEW.Total));
+END;
+//
+DELIMITER ;

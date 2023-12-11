@@ -66,7 +66,7 @@ La base de datos está diseñada para gestionar la información de una ferreter�
 
 ## Funciones Almacenadas de la Base de Datos
 
-- **valor_inventario_categoria(categoria_id INT):**
+- **valor_inventario_categoria(categoria_id INT)- **
   - Función que calcula el valor total del inventario para una categoría específica.
   - Recibe el ID de la categoría como parámetro.
   - Retorna el valor total del inventario como un `DECIMAL(10,2)`.
@@ -75,3 +75,26 @@ La base de datos está diseñada para gestionar la información de una ferreter�
   - Función que obtiene el correo electrónico de un cliente basado en su ID.
   - Recibe el ID del cliente como parámetro.
   - Retorna el correo electrónico del cliente como un `VARCHAR(255)`.
+Seguimiento y Auditoría con Triggers y Tablas LOG
+Para garantizar un seguimiento detallado y realizar auditorías de las operaciones críticas, se han implementado triggers y tablas de tipo LOG para las tablas Productos y Ventas.
+
+## Tablas LOG:
+
+- **Log_Productos:- **
+Registra todas las operaciones de intento de inserción y eliminación de productos.
+Campos como usuario, fecha, hora, operación realizada y detalles del producto afectado.
+
+- **Log_Ventas:- **
+Captura las operaciones de intento de actualización de ventas y las inserciones de nuevas ventas.
+Campos como usuario, fecha, hora, operación realizada y detalles de la venta afectada.
+
+
+##Triggers:
+
+Productos:
+AntesInsertarProducto: Controla el intento de inserción de un nuevo producto antes de que se ejecute la operación.
+DespuesEliminarProducto: Registra la eliminación de un producto después de que se haya realizado la operación.
+
+Ventas:
+AntesActualizarVenta: Controla el intento de actualización de una venta antes de que se ejecute la operación.
+DespuesInsertarVenta: Registra la inserción de una nueva venta después de que se haya realizado la operación.

@@ -212,7 +212,7 @@ BEFORE INSERT ON Productos
 FOR EACH ROW
 BEGIN
     INSERT INTO Log_Productos (Usuario, Fecha, Hora, Operacion, ID_Producto, Descripcion)
-    VALUES (USER(), CURDATE(), CURTIME(), 'INTENTO INSERTAR', NEW.ID_Producto, 'Intento de inserción de producto');
+    VALUES (USER(), CURDATE(), CURTIME(), 'INTENTO INSERTAR', NEW.ID_Producto, 'Intento de insercion de producto');
 END;
 //
 DELIMITER ;
@@ -237,7 +237,7 @@ BEFORE UPDATE ON Ventas
 FOR EACH ROW
 BEGIN
     INSERT INTO Log_Ventas (Usuario, Fecha, Hora, Operacion, ID_Venta, Descripcion)
-    VALUES (USER(), CURDATE(), CURTIME(), 'INTENTO ACTUALIZAR', NEW.ID_Venta, 'Intento de actualización de venta');
+    VALUES (USER(), CURDATE(), CURTIME(), 'INTENTO ACTUALIZAR', NEW.ID_Venta, 'Intento de actualizacion de venta');
 END;
 //
 DELIMITER ;
@@ -253,3 +253,19 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+
+CREATE USER 'usuario_lectura'@'localhost' IDENTIFIED BY 'password_lectura';
+-- Crea un nuevo usuario llamado 'usuario_lectura' con una contraseña 'password_lectura'.
+
+GRANT SELECT ON FerreteriaDB.* TO 'usuario_lectura'@'localhost';
+-- Otorga permisos de SELECT (lectura) en todas las tablas de la base de datos 'FerreteriaDB' al usuario 'usuario_lectura'.
+
+CREATE USER 'usuario_modificacion'@'localhost' IDENTIFIED BY 'password_modificacion';
+-- Crea un nuevo usuario con permisos de lectura, insercion y modificacion llamado 'usuario_modificacion' con una contraseña 'password_modificacion'.
+
+GRANT SELECT, INSERT, UPDATE ON FerreteriaDB.* TO 'usuario_modificacion'@'localhost';
+-- Permisos de SELECT (lectura), INSERT (insercion) y UPDATE (modificacion) en todas las tablas de la base de datos 'FerreteriaDB' al usuario 'usuario_modificacion'.
+
+FLUSH PRIVILEGES;
+-- Aplica los cambios de permisos y recarga la tabla de privilegios para asegurarse de que los permisos esten asignados 

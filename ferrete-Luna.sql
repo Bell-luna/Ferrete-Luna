@@ -269,3 +269,48 @@ GRANT SELECT, INSERT, UPDATE ON FerreteriaDB.* TO 'usuario_modificacion'@'localh
 
 FLUSH PRIVILEGES;
 -- Aplica los cambios de permisos y recarga la tabla de privilegios para asegurarse de que los permisos esten asignados 
+
+
+
+START TRANSACTION;
+
+-- Eliminar registros de la tabla Clientes con ID_Cliente mayores a 2
+DELETE FROM Clientes WHERE ID_Cliente > 2;
+
+-- (descomentar ROLLBACK para deshacer los cambios)
+-- ROLLBACK;
+
+--  (descomentar Commit para confirmar los cambios)
+-- COMMIT;
+
+-- De ser necesario re-insertar los registros eliminados, se dejarian estas sentencias comentadas: 
+-- INSERT INTO Clientes (ID_Cliente, Nombre, Direccion, Telefono, Email) VALUES (3, 'Cliente Tres', 'Calle 3', '333-333-3333', 'cliente3@example.com');
+-- INSERT INTO Clientes (ID_Cliente, Nombre, Direccion, Telefono, Email) VALUES (4, 'Cliente Cuatro', 'Calle 4', '444-444-4444', 'cliente4@example.com');
+
+
+
+START TRANSACTION;
+
+--  (primeros cuatro registros en la tabla Productos)
+INSERT INTO Productos (ID_Producto, Nombre, Descripcion, Precio, Stock, ID_Categoria) VALUES (4, 'Tornillo', 'Tornillos de acero', 0.10, 1000, 1);
+INSERT INTO Productos (ID_Producto, Nombre, Descripcion, Precio, Stock, ID_Categoria) VALUES (5, 'Destornillador', 'Destornillador plano', 3.50, 50, 1);
+INSERT INTO Productos (ID_Producto, Nombre, Descripcion, Precio, Stock, ID_Categoria) VALUES (6, 'Alicate', 'Alicate de punta fina', 5.00, 30, 1);
+INSERT INTO Productos (ID_Producto, Nombre, Descripcion, Precio, Stock, ID_Categoria) VALUES (7, 'Sierra', 'Sierra para metal', 15.00, 20, 1);
+
+-- Savepoint después del registro #4
+SAVEPOINT SavepointCuatroRegistros;
+
+--  (siguientes cuatro registros en la tabla Productos)
+INSERT INTO Productos (ID_Producto, Nombre, Descripcion, Precio, Stock, ID_Categoria) VALUES (8, 'Cinta Métrica', 'Cinta métrica de 5m', 2.50, 50, 1);
+INSERT INTO Productos (ID_Producto, Nombre, Descripcion, Precio, Stock, ID_Categoria) VALUES (9, 'Nivel', 'Nivel de burbuja', 4.00, 40, 1);
+INSERT INTO Productos (ID_Producto, Nombre, Descripcion, Precio, Stock, ID_Categoria) VALUES (10, 'Pala', 'Pala de construcción', 12.00, 15, 1);
+INSERT INTO Productos (ID_Producto, Nombre, Descripcion, Precio, Stock, ID_Categoria) VALUES (11, 'Brocha', 'Brocha para pintar', 1.50, 100, 2);
+
+-- Savepoint después del registro #8
+SAVEPOINT SavepointOchoRegistros;
+
+--  Sentencia comentada para eliminar el savepoint de los primeros 4 registros insertados
+-- ROLLBACK TO SavepointCuatroRegistros;
+
+--  Commit para confirmar la transacción
+-- COMMIT;
